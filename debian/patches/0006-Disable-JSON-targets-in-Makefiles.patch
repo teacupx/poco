@@ -1,0 +1,166 @@
+From: Jochen Sprickerhof <git@jochen.sprickerhof.de>
+Date: Mon, 31 Oct 2016 00:22:35 +0100
+Subject: Disable JSON targets in Makefiles
+
+---
+ Makefile                                      | 20 ++++++++++----------
+ NetSSL_OpenSSL/testsuite/Makefile             |  2 +-
+ PageCompiler/File2Page/Makefile               |  2 +-
+ PageCompiler/Makefile                         |  2 +-
+ Util/Makefile                                 |  1 -
+ Util/testsuite/Makefile                       |  5 ++---
+ Util/testsuite/src/ConfigurationTestSuite.cpp |  1 -
+ 7 files changed, 15 insertions(+), 18 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 4efed4c..8a33cd7 100644
+--- a/Makefile
++++ b/Makefile
+@@ -85,7 +85,7 @@ poco: libexecs $(if $(TESTS),tests) $(if $(SAMPLES),samples)
+ all: libexecs tests samples
+ 
+ INSTALLDIR = $(DESTDIR)$(POCO_PREFIX)
+-COMPONENTS = Foundation XML JSON Util Net Crypto NetSSL_OpenSSL Data Data/SQLite Data/ODBC Data/MySQL MongoDB Zip PageCompiler PageCompiler/File2Page
++COMPONENTS = Foundation XML Util Net Crypto NetSSL_OpenSSL Data Data/SQLite Data/ODBC Data/MySQL MongoDB Zip PageCompiler PageCompiler/File2Page
+ 
+ cppunit:
+ 	$(MAKE) -C $(POCO_BASE)/CppUnit 
+@@ -112,10 +112,10 @@ endif
+ 	find $(POCO_BUILD)/lib/$(OSNAME)/$(OSARCH) -name "libPoco*" -type f -exec cp -f  {} $(INSTALLDIR)/lib \;
+ 	find $(POCO_BUILD)/lib/$(OSNAME)/$(OSARCH) -name "libPoco*" -type l -exec cp -Rf {} $(INSTALLDIR)/lib \;
+ 
+-libexecs =  Foundation-libexec XML-libexec JSON-libexec Util-libexec Net-libexec Crypto-libexec NetSSL_OpenSSL-libexec Data-libexec Data/SQLite-libexec Data/ODBC-libexec Data/MySQL-libexec MongoDB-libexec Zip-libexec PageCompiler-libexec PageCompiler/File2Page-libexec
+-tests    =  Foundation-tests XML-tests JSON-tests Util-tests Net-tests Crypto-tests NetSSL_OpenSSL-tests Data-tests Data/SQLite-tests Data/ODBC-tests Data/MySQL-tests MongoDB-tests Zip-tests
+-samples  =  Foundation-samples XML-samples JSON-samples Util-samples Net-samples Crypto-samples NetSSL_OpenSSL-samples Data-samples MongoDB-samples Zip-samples PageCompiler-samples
+-cleans   =  Foundation-clean XML-clean JSON-clean Util-clean Net-clean Crypto-clean NetSSL_OpenSSL-clean Data-clean Data/SQLite-clean Data/ODBC-clean Data/MySQL-clean MongoDB-clean Zip-clean PageCompiler-clean PageCompiler/File2Page-clean
++libexecs =  Foundation-libexec XML-libexec Util-libexec Net-libexec Crypto-libexec NetSSL_OpenSSL-libexec Data-libexec Data/SQLite-libexec Data/ODBC-libexec Data/MySQL-libexec MongoDB-libexec Zip-libexec PageCompiler-libexec PageCompiler/File2Page-libexec
++tests    =  Foundation-tests XML-tests Util-tests Net-tests Crypto-tests NetSSL_OpenSSL-tests Data-tests Data/SQLite-tests Data/ODBC-tests Data/MySQL-tests MongoDB-tests Zip-tests
++samples  =  Foundation-samples XML-samples Util-samples Net-samples Crypto-samples NetSSL_OpenSSL-samples Data-samples MongoDB-samples Zip-samples PageCompiler-samples
++cleans   =  Foundation-clean XML-clean Util-clean Net-clean Crypto-clean NetSSL_OpenSSL-clean Data-clean Data/SQLite-clean Data/ODBC-clean Data/MySQL-clean MongoDB-clean Zip-clean PageCompiler-clean PageCompiler/File2Page-clean
+ 
+ .PHONY: $(libexecs)
+ .PHONY: $(tests)
+@@ -169,7 +169,7 @@ JSON-clean:
+ 	$(MAKE) -C $(POCO_BASE)/JSON/testsuite clean
+ 	$(MAKE) -C $(POCO_BASE)/JSON/samples clean
+ 
+-Util-libexec:  Foundation-libexec XML-libexec JSON-libexec
++Util-libexec:  Foundation-libexec XML-libexec
+ 	$(MAKE) -C $(POCO_BASE)/Util
+ 
+ Util-tests: Util-libexec cppunit
+@@ -189,7 +189,7 @@ Net-libexec:  Foundation-libexec
+ Net-tests: Net-libexec cppunit
+ 	$(MAKE) -C $(POCO_BASE)/Net/testsuite
+ 	
+-Net-samples: Net-libexec  Foundation-libexec XML-libexec JSON-libexec Util-libexec
++Net-samples: Net-libexec  Foundation-libexec XML-libexec Util-libexec
+ 	$(MAKE) -C $(POCO_BASE)/Net/samples
+ 
+ Net-clean:
+@@ -283,7 +283,7 @@ MongoDB-clean:
+ 	$(MAKE) -C $(POCO_BASE)/MongoDB/testsuite clean
+ 	$(MAKE) -C $(POCO_BASE)/MongoDB/samples clean
+ 
+-Zip-libexec:  Foundation-libexec Net-libexec Util-libexec XML-libexec JSON-libexec
++Zip-libexec:  Foundation-libexec Net-libexec Util-libexec XML-libexec
+ 	$(MAKE) -C $(POCO_BASE)/Zip
+ 
+ Zip-tests: Zip-libexec cppunit
+@@ -297,7 +297,7 @@ Zip-clean:
+ 	$(MAKE) -C $(POCO_BASE)/Zip/testsuite clean
+ 	$(MAKE) -C $(POCO_BASE)/Zip/samples clean
+ 
+-PageCompiler-libexec:  Net-libexec Util-libexec XML-libexec JSON-libexec Foundation-libexec
++PageCompiler-libexec:  Net-libexec Util-libexec XML-libexec Foundation-libexec
+ 	$(MAKE) -C $(POCO_BASE)/PageCompiler
+ 	
+ PageCompiler-samples: PageCompiler-libexec  Foundation-libexec Net-libexec Util-libexec PageCompiler-libexec
+@@ -307,7 +307,7 @@ PageCompiler-clean:
+ 	$(MAKE) -C $(POCO_BASE)/PageCompiler clean
+ 	$(MAKE) -C $(POCO_BASE)/PageCompiler/samples clean
+ 
+-PageCompiler/File2Page-libexec:  Net-libexec Util-libexec XML-libexec JSON-libexec Foundation-libexec
++PageCompiler/File2Page-libexec:  Net-libexec Util-libexec XML-libexec Foundation-libexec
+ 	$(MAKE) -C $(POCO_BASE)/PageCompiler/File2Page
+ 
+ PageCompiler/File2Page-clean:
+diff --git a/NetSSL_OpenSSL/testsuite/Makefile b/NetSSL_OpenSSL/testsuite/Makefile
+index 7c425ae..496d15a 100644
+--- a/NetSSL_OpenSSL/testsuite/Makefile
++++ b/NetSSL_OpenSSL/testsuite/Makefile
+@@ -21,6 +21,6 @@ objects = NetSSLTestSuite Driver \
+ 
+ target         = testrunner
+ target_version = 1
+-target_libs    = PocoNetSSL PocoNet PocoCrypto PocoUtil PocoJSON PocoXML PocoFoundation CppUnit
++target_libs    = PocoNetSSL PocoNet PocoCrypto PocoUtil PocoXML PocoFoundation CppUnit
+ 
+ include $(POCO_BASE)/build/rules/exec
+diff --git a/PageCompiler/File2Page/Makefile b/PageCompiler/File2Page/Makefile
+index 30fd3b5..8febd32 100644
+--- a/PageCompiler/File2Page/Makefile
++++ b/PageCompiler/File2Page/Makefile
+@@ -16,6 +16,6 @@ endif
+ 
+ target         = f2cpsp
+ target_version = 1
+-target_libs    = PocoUtil PocoXML PocoJSON PocoFoundation
++target_libs    = PocoUtil PocoXML PocoFoundation
+ 
+ include $(POCO_BASE)/build/rules/exec
+diff --git a/PageCompiler/Makefile b/PageCompiler/Makefile
+index 2f762fa..29893a7 100644
+--- a/PageCompiler/Makefile
++++ b/PageCompiler/Makefile
+@@ -18,6 +18,6 @@ endif
+ 
+ target         = cpspc
+ target_version = 1
+-target_libs    = PocoNet PocoUtil PocoXML PocoJSON PocoFoundation
++target_libs    = PocoNet PocoUtil PocoXML PocoFoundation
+ 
+ include $(POCO_BASE)/build/rules/exec
+diff --git a/Util/Makefile b/Util/Makefile
+index 8e282cc..4978ffd 100644
+--- a/Util/Makefile
++++ b/Util/Makefile
+@@ -32,7 +32,6 @@ endif
+ 
+ ifndef POCO_UTIL_NO_JSONCONFIGURATION
+ objects     += JSONConfiguration
+-target_libs += PocoJSON
+ endif
+ 
+ include $(POCO_BASE)/build/rules/lib
+diff --git a/Util/testsuite/Makefile b/Util/testsuite/Makefile
+index e79c222..da4a0e7 100644
+--- a/Util/testsuite/Makefile
++++ b/Util/testsuite/Makefile
+@@ -16,12 +16,11 @@ objects = AbstractConfigurationTest ConfigurationTestSuite \
+ 	OptionsTestSuite PropertyFileConfigurationTest \
+ 	SystemConfigurationTest UtilTestSuite XMLConfigurationTest \
+ 	FilesystemConfigurationTest ValidatorTest \
+-	TimerTestSuite TimerTest \
+-	JSONConfigurationTest
++	TimerTestSuite TimerTest
+ 
+ target         = testrunner
+ target_version = 1
+-target_libs    = PocoUtil PocoXML PocoJSON PocoFoundation CppUnit
++target_libs    = PocoUtil PocoXML PocoFoundation CppUnit
+ 
+ include $(POCO_BASE)/build/rules/exec
+ 
+diff --git a/Util/testsuite/src/ConfigurationTestSuite.cpp b/Util/testsuite/src/ConfigurationTestSuite.cpp
+index a62afb7..beb42a7 100644
+--- a/Util/testsuite/src/ConfigurationTestSuite.cpp
++++ b/Util/testsuite/src/ConfigurationTestSuite.cpp
+@@ -39,7 +39,6 @@ CppUnit::Test* ConfigurationTestSuite::suite()
+ 	pSuite->addTest(XMLConfigurationTest::suite());
+ 	pSuite->addTest(FilesystemConfigurationTest::suite());
+ 	pSuite->addTest(LoggingConfiguratorTest::suite());
+-	pSuite->addTest(JSONConfigurationTest::suite());
+ 
+ 	return pSuite;
+ }
