@@ -228,3 +228,19 @@ Description: C++ Portable Components (POCO) Zip library
  consistent and easy to maintain.
  .
  This package provides the POCO Zip library.
+
+Package: libpocojson46
+Architecture: any
+Depends: libpocofoundation46 (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: C++ Portable Components (POCO) JSON library
+ The POCO C++ Libraries are a collection of open source C++ class libraries
+ that simplify and accelerate the development of network-centric, portable
+ applications in C++. The libraries integrate perfectly with the C++ Standard
+ Library and fill many of the functional gaps left open by it.
+ .
+ POCO is built strictly using standard ANSI/ISO C++, including the standard
+ library. The contributors attempt to find a good balance between using advanced
+ C++ features and keeping the classes comprehensible and the code clean,
+ consistent and easy to maintain.
+ .
+ This package provides the POCO JSON library.

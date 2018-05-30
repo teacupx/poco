@@ -1,3 +1,9 @@
+poco (1.7.6-lool-1) stable; urgency=medium
+
+  * A custom build of 1.7.6 including non-DFSG JSON libraries for LibreOffice Online
+
+ -- teacupx <teacupx@github.com>  Wed, 30 May 2018 13:47:21 +0200
+
 poco (1.7.6+dfsg1-5+deb9u1) stretch-security; urgency=high
 
   * Add backported patch for CVE-2017-1000472
